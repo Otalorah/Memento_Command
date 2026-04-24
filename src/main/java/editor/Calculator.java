@@ -5,6 +5,10 @@ import java.util.Base64;
 import java.util.List;
 import java.io.*;
 
+/**
+ * Originator del patrón Memento.
+ * La calculadora crea instantáneas de su estado y puede restaurarlas.
+ */
 public class Calculator {
     private double currentValue;
     private List<String> steps;
@@ -20,20 +24,34 @@ public class Calculator {
     public List<String> getSteps() { return new ArrayList<>(steps); }
     public String getDisplayValue() { return String.format("%.4f", currentValue); }
 
-    public String backup() {
+    /**
+     * Crea una instantánea del estado actual.
+     * Esto implementa la parte "save" del patrón Memento.
+     */
+    public Memento createMemento() {
+        return new Memento(backup());
+    }
+
+    /**
+     * Serializa el estado completo necesario para restaurar la calculadora
+     * exactamente al estado previo.
+     */
+    private String backup() {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(new CalculatorState(currentValue, steps));
             oos.close();
             return Base64.getEncoder().encodeToString(baos.toByteArray());
-        } catch (IOException e) { return ""; }
+        } catch (IOException e) {
+            throw new IllegalStateException("No se pudo crear el respaldo del estado.", e);
+        }
     }
 
-    public Memento save() {
-        return new Memento(this);
-    }
-
+    /**
+     * Restaura el estado desde un Memento.
+     * Esto corresponde a la parte "restore" del patrón Memento.
+     */
     public void restore(Memento memento) {
         try {
             byte[] data = Base64.getDecoder().decode(memento.getState());
@@ -43,10 +61,14 @@ public class Calculator {
             this.steps = new ArrayList<>(s.steps);
             ois.close();
         } catch (IOException | ClassNotFoundException e) {
-            System.out.print("Error al restaurar estado.");
+            throw new IllegalStateException("Error al restaurar el estado de la calculadora.", e);
         }
     }
 
+    /**
+     * Estado interno serializable de la calculadora.
+     * Incluye valor actual y trazabilidad de pasos.
+     */
     private static class CalculatorState implements Serializable {
         private static final long serialVersionUID = 1L;
         private final double value;
