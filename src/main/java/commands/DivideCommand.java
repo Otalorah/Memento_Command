@@ -1,30 +1,25 @@
 package commands;
 
-import editor.Editor;
+import editor.Calculator;
 
 public class DivideCommand implements Command {
-   private final Editor editor;
+   private final Calculator calculator;
    private final double operand;
 
-   public DivideCommand(Editor editor, double operand) {
-      this.editor = editor;
+   public DivideCommand(Calculator calculator, double operand) {
+      this.calculator = calculator;
       this.operand = operand;
    }
 
    @Override
-   public String getName() {
-      return "Dividir por " + operand;
-   }
+   public String getName() { return "Dividir por " + operand; }
 
    @Override
    public void execute() {
-      if (operand == 0.0) {
-         throw new IllegalArgumentException("No se puede dividir entre cero.");
-      }
-
-      double previous = editor.getCurrentValue();
+      if (operand == 0.0) throw new IllegalArgumentException("No se puede dividir entre cero.");
+      double previous = calculator.getCurrentValue();
       double result = previous / operand;
-      editor.setCurrentValue(result);
-      editor.appendStep(String.format("Division: %.4f / %.4f = %.4f", previous, operand, result));
+      calculator.setCurrentValue(result);
+      calculator.appendStep(String.format("Division: %.4f / %.4f = %.4f", previous, operand, result));
    }
 }

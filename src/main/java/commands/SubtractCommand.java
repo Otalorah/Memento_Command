@@ -1,26 +1,24 @@
 package commands;
 
-import editor.Editor;
+import editor.Calculator;
 
 public class SubtractCommand implements Command {
-   private final Editor editor;
+   private final Calculator calculator;
    private final double operand;
 
-   public SubtractCommand(Editor editor, double operand) {
-      this.editor = editor;
+   public SubtractCommand(Calculator calculator, double operand) {
+      this.calculator = calculator;
       this.operand = operand;
    }
 
    @Override
-   public String getName() {
-      return "Restar " + operand;
-   }
+   public String getName() { return "Restar " + operand; }
 
    @Override
    public void execute() {
-      double previous = editor.getCurrentValue();
+      double previous = calculator.getCurrentValue();
       double result = previous - operand;
-      editor.setCurrentValue(result);
-      editor.appendStep(String.format("Resta: %.4f - %.4f = %.4f", previous, operand, result));
+      calculator.setCurrentValue(result);
+      calculator.appendStep(String.format("Resta: %.4f - %.4f = %.4f", previous, operand, result));
    }
 }

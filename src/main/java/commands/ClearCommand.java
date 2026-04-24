@@ -1,22 +1,20 @@
 package commands;
 
-import editor.Editor;
+import editor.Calculator;
 
 public class ClearCommand implements Command {
-   private final Editor editor;
+   private final Calculator calculator;
 
-   public ClearCommand(Editor editor) {
-      this.editor = editor;
+   public ClearCommand(Calculator calculator) {
+      this.calculator = calculator;
    }
 
    @Override
-   public String getName() {
-      return "Borrar resultado";
-   }
+   public String getName() { return "Borrar resultado"; }
 
    @Override
    public void execute() {
-      editor.setCurrentValue(0.0);
-      editor.appendStep("Borrado: resultado reiniciado a 0.0000");
+      calculator.setCurrentValue(0.0);
+      calculator.appendStep("Borrado: resultado reiniciado a 0.0000");
    }
 }
