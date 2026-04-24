@@ -1,19 +1,17 @@
 package editor;
 
+/**
+ * Memento: almacena una instantánea inmutable del estado de la calculadora.
+ * No conoce cómo restaurar; solo guarda el estado.
+ */
 public class Memento {
-   private final String backup;
-   private final Calculator calculator;
+   private final String state;
 
-   public Memento(Calculator calculator) {
-      this.calculator = calculator;
-      this.backup = calculator.backup();
+   public Memento(String state) {
+      this.state = state;
    }
 
    public String getState() {
-      return backup;
-   }
-
-   public void restore() {
-      calculator.restore(this);
+      return state;
    }
 }
